@@ -15,7 +15,6 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
 package me.zhenxin.qqbot.api;
 
 import com.alibaba.fastjson.JSON;
@@ -40,7 +39,6 @@ import java.util.Map;
 public abstract class BaseApi {
     private final String api;
     private final String token;
-
     private final OkHttpClient client = new OkHttpClient.Builder().build();
     private final MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
 
@@ -58,64 +56,40 @@ public abstract class BaseApi {
 
     protected <T> T get(String url, Class<T> tClass) throws ApiException {
         log.debug("GET Url: {}", url);
-        Request request =
-                new Request.Builder()
-                        .url(api + url)
-                        .header("Authorization", token)
-                        .get()
-                        .build();
+        Request request = new Request.Builder().url(api + url).header("Authorization", token).get().build();
         return result(request, tClass);
     }
 
     protected <T> T post(String path, Map<String, Object> data, Class<T> tClass) throws ApiException {
         log.debug("POST Data: {}", JSON.toJSONString(data));
         RequestBody body = RequestBody.create(JSON.toJSONString(data), mediaType);
-        Request request =
-                new Request.Builder()
-                        .url(api + path)
-                        .header("Authorization", token)
-                        .post(body)
-                        .build();
+        Request request = new Request.Builder().url(api + path).header("Authorization", token).post(body).build();
         return result(request, tClass);
     }
 
     protected <T> T put(String path, Map<String, Object> data, Class<T> tClass) throws ApiException {
         log.debug("PUT Data: {}", JSON.toJSONString(data));
         RequestBody body = RequestBody.create(JSON.toJSONString(data), mediaType);
-        Request request =
-                new Request.Builder()
-                        .url(api + path)
-                        .header("Authorization", token)
-                        .put(body)
-                        .build();
+        Request request = new Request.Builder().url(api + path).header("Authorization", token).put(body).build();
         return result(request, tClass);
     }
 
     protected void delete(String path, Map<String, Object> data) throws ApiException {
         log.debug("DELETE Data: {}", JSON.toJSONString(data));
         RequestBody body = RequestBody.create(JSON.toJSONString(data), mediaType);
-        Request request =
-                new Request.Builder()
-                        .url(api + path)
-                        .header("Authorization", token)
-                        .delete(body)
-                        .build();
+        Request request = new Request.Builder().url(api + path).header("Authorization", token).delete(body).build();
         result(request, null);
     }
 
     protected <T> T patch(String path, Map<String, Object> data, Class<T> tClass) throws ApiException {
         log.debug("PATCH Data: {}", JSON.toJSONString(data));
         RequestBody body = RequestBody.create(JSON.toJSONString(data), mediaType);
-        Request request =
-                new Request.Builder()
-                        .url(api + path)
-                        .header("Authorization", token)
-                        .patch(body)
-                        .build();
+        Request request = new Request.Builder().url(api + path).header("Authorization", token).patch(body).build();
         return result(request, tClass);
     }
 
-    private <T> T result(Request request, Class<T> tClass) throws ApiException {
+    @SuppressWarnings("unchecked")
+	private <T> T result(Request request, Class<T> tClass) throws ApiException {
         Call call = client.newCall(request);
         try {
             Response response = call.execute();
@@ -140,7 +114,6 @@ public abstract class BaseApi {
                     //noinspection unchecked
                     return (T) JSON.parseArray(bodyStr);
                 }
-
                 if (tClass != null) {
                     return JSON.parseObject(bodyStr, tClass);
                 } else {
@@ -323,7 +296,6 @@ public abstract class BaseApi {
                 } else {
                     throw new ApiException(code, "未知错误(" + message + ")", message, traceId);
                 }
-
         }
     }
 }

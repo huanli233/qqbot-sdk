@@ -8,7 +8,6 @@ import java.util.List;
  * 表情表态用户列表
  *
  * @author 真心
- * @email qgzhenxin@qq.com
  * @since 2022/9/24 10:45
  */
 @Data

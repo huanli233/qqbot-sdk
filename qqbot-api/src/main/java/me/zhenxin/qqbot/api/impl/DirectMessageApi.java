@@ -66,6 +66,23 @@ public class DirectMessageApi extends BaseApi {
         data.put("msg_id", messageId);
         return sendMessage(guildId, data);
     }
+    
+    /**
+     * 发送文本消息
+     *
+     * @param guildId   频道ID
+     * @param content   文本内容
+     * @param messageId 消息ID
+     * @param messageReference 引用消息
+     * @return {@link Message} 对象
+     */
+    public Message sendMessage(String guildId, String content, String messageId, MessageReference messageReference) throws ApiException {
+        Map<String, Object> data = new HashMap<>();
+        data.put("content", content);
+        data.put("msg_id", messageId);
+        data.put("message_reference", messageReference);
+        return sendMessage(guildId, data);
+    }
 
     /**
      * 发送图片消息

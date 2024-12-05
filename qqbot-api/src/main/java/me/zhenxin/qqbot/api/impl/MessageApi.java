@@ -24,7 +24,9 @@ import me.zhenxin.qqbot.entity.ark.MessageArk;
 import me.zhenxin.qqbot.exception.ApiException;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 /**
@@ -33,11 +35,12 @@ import java.util.Map;
  * @author 真心
  * @since 2021/12/8 16:15
  */
-@SuppressWarnings("UnusedReturnValue")
 public class MessageApi extends BaseApi {
     public MessageApi(AccessInfo accessInfo) {
         super(accessInfo);
     }
+
+    private static final Map<String, Integer> seqMap = Collections.synchronizedMap(new LinkedHashMap<>());
 
     /**
      * 发送文本消息
@@ -51,6 +54,23 @@ public class MessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("content", content);
         data.put("msg_id", messageId);
+        return sendMessage(channelId, data);
+    }
+    
+    /**
+     * 发送文本消息
+     *
+     * @param channelId 子频道ID
+     * @param content   文本内容
+     * @param messageId 消息ID
+     * @param messageReference 引用消息
+     * @return {@link Message} 对象
+     */
+    public Message sendMessage(String channelId, String content, String messageId, MessageReference messageReference) throws ApiException {
+        Map<String, Object> data = new HashMap<>();
+        data.put("content", content);
+        data.put("msg_id", messageId);
+        data.put("message_reference", messageReference);
         return sendMessage(channelId, data);
     }
 
@@ -194,6 +214,9 @@ public class MessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("content", content);
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         return sendGroupMessage(groupOpenId, data);
     }
 
@@ -203,6 +226,9 @@ public class MessageApi extends BaseApi {
     public Message sendGroupMessage(String groupOpenId, URL image, String messageId) {
         Map<String, Object> data = new HashMap<>();
         data.put("image", image.toString());
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         data.put("msg_id", messageId);
         return sendGroupMessage(groupOpenId, data);
     }
@@ -214,6 +240,9 @@ public class MessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("content", content);
         data.put("image", image.toString());
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         data.put("msg_id", messageId);
         return sendGroupMessage(groupOpenId, data);
     }
@@ -224,6 +253,9 @@ public class MessageApi extends BaseApi {
     public Message sendGroupMessage(String groupOpenId, MessageArk ark, String messageId) {
         Map<String, Object> data = new HashMap<>();
         data.put("ark", ark);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         data.put("msg_id", messageId);
         return sendGroupMessage(groupOpenId, data);
     }
@@ -234,6 +266,9 @@ public class MessageApi extends BaseApi {
     public Message sendGroupMessage(String groupOpenId, MessageEmbed embed, String messageId) {
         Map<String, Object> data = new HashMap<>();
         data.put("embed", embed);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         data.put("msg_id", messageId);
         return sendGroupMessage(groupOpenId, data);
     }
