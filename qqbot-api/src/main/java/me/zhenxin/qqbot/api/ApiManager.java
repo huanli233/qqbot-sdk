@@ -127,7 +127,7 @@ public class ApiManager {
     }
 
     /**
-     * 获取 私信API 实例
+     * 获取 频道私信API 实例
      */
     public DirectMessageApi getDirectMessageApi() {
         return new DirectMessageApi(accessInfo);
@@ -138,5 +138,12 @@ public class ApiManager {
      */
     public ForumApi getForumApi() {
         return new ForumApi(accessInfo);
+    }
+
+    /**
+     * 获取 私聊API 实例
+     */
+    public C2CMessageApi getC2CMessageApi() {
+        return new C2CMessageApi(accessInfo);
     }
 }

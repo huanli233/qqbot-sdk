@@ -226,4 +226,8 @@ public class EventHandler {
     protected void onGroupMsgReceive(GroupMsgReceiveEvent event) {
 
     }
+
+    protected void onC2CMessage(C2CMessageEvent event) {
+
+    }
 }

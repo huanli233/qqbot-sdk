@@ -188,6 +188,7 @@ class Event {
                 );
                 GroupMessageEvent groupMessageEvent = new GroupMessageEvent(this, groupMessage);
                 client.getEventHandler().onGroupMessage(groupMessageEvent);
+                break;
             case "GROUP_ADD_ROBOT":
                 Group gar = JSON.toJavaObject((JSONObject) payload.getD(), Group.class);
                 log.info("机器人加入了群聊: {} 操作者: {}", gar.getGroupOpenId(), gar.getOpMemberOpenId());
@@ -199,16 +200,29 @@ class Event {
                 log.info("机器人离开了群聊: {} 操作者: {}", gdr.getGroupOpenId(), gdr.getOpMemberOpenId());
                 GroupDelRobotEvent groupDelRobotEvent = new GroupDelRobotEvent(this, gdr);
                 client.getEventHandler().onGroupDelRobot(groupDelRobotEvent);
+                break;
             case "GROUP_MSG_REJECT":
                 Group gmr = JSON.toJavaObject((JSONObject) payload.getD(), Group.class);
                 log.info("机器人在群聊 {} 中被禁止主动推送消息, 操作者: {}", gmr.getGroupOpenId(), gmr.getOpMemberOpenId());
                 GroupMsgRejectEvent groupMsgRejectEvent = new GroupMsgRejectEvent(this, gmr);
                 client.getEventHandler().onGroupMsgReject(groupMsgRejectEvent);
+                break;
             case "GROUP_MSG_RECEIVE":
                 Group gms = JSON.toJavaObject((JSONObject) payload.getD(), Group.class);
                 log.info("机器人在群聊 {} 中被允许主动推送消息, 操作者: {}", gms.getGroupOpenId(), gms.getOpMemberOpenId());
                 GroupMsgReceiveEvent groupMsgReceiveEvent = new GroupMsgReceiveEvent(this, gms);
                 client.getEventHandler().onGroupMsgReceive(groupMsgReceiveEvent);
+                break;
+            case "C2C_MESSAGE_CREATE":
+                Message c2cMessage = JSON.toJavaObject((JSONObject) payload.getD(), Message.class);
+                log.info(
+                        "[C2CMessage] {}: {}",
+                        c2cMessage.getAuthor().getId(),
+                        c2cMessage.getContent()
+                );
+                C2CMessageEvent c2cMessageEvent = new C2CMessageEvent(this, c2cMessage);
+                client.getEventHandler().onC2CMessage(c2cMessageEvent);
+                break;
             case "RESUMED":
                 log.info("恢复连接成功, 离线消息已处理!");
                 break;
