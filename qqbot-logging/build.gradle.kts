@@ -1,3 +1,7 @@
+plugins {
+    kotlin("jvm")
+}
+
 dependencies {
-    implementation(libs.logback.classic)
+    api(libs.logback.classic)
 }

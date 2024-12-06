@@ -1,4 +1,9 @@
+plugins {
+    kotlin("jvm")
+}
+
 dependencies {
-    implementation(project(":qqbot-websocket"))
-    implementation(project(":qqbot-logging"))
+    api(project(":qqbot-api"))
+    api(project(":qqbot-websocket"))
+    api(project(":qqbot-logging"))
 }

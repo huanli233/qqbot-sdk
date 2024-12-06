@@ -1,21 +1,25 @@
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
-    alias(libs.plugins.kotlin.jvm)
+    kotlin("jvm") version "2.0.10"
 }
 
 allprojects {
     group = "me.zhenxin"
     version = "2.0.0-dev"
+
+    repositories {
+        mavenCentral()
+        maven { url = uri("https://jitpack.io") }
+        mavenLocal()
+        gradlePluginPortal()
+    }
 }
 
 subprojects {
-    apply {
-        plugin("org.jetbrains.kotlin.jvm")
-    }
-
     tasks.withType<KotlinCompile> {
-        kotlinOptions.jvmTarget = "1.8"
+        compilerOptions.jvmTarget.set(JvmTarget.JVM_17)
     }
 }
 

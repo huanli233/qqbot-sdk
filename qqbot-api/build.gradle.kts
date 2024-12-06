@@ -1,13 +1,11 @@
 plugins {
-    alias(libs.plugins.kyori.blossom)
-}
-
-blossom {
-    replaceToken("#VERSION#", project.version.toString())
+    kotlin("jvm")
 }
 
 dependencies {
     api(project(":qqbot-common"))
 
     api(libs.okhttp)
+    api(libs.fastjson.kotlin)
+    api(libs.kotlin.logging)
 }

@@ -1,6 +1,10 @@
-dependencies {
-    api(libs.fastjson.kotlin)
-    api(libs.kotlin.reflect)
+plugins {
+    kotlin("jvm")
+}
 
-    api(libs.kotlin.logging)
+dependencies {
+    implementation(libs.fastjson.kotlin)
+    implementation(libs.kotlin.reflect)
+
+    implementation(libs.kotlin.logging)
 }
