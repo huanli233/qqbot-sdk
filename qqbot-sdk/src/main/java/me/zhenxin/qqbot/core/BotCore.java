@@ -47,6 +47,10 @@ import java.util.List;
 public class BotCore {
     private final List<Intent> intents = new ArrayList<>();
     private final AccessInfo accessInfo;
+    private int overrideHeartbeatInterval = -1;
+    private boolean webhookEnabled = false;
+    private boolean webSocketEnabled = true;
+
     /**
      * 事件监听器
      */
@@ -93,6 +97,10 @@ public class BotCore {
         return "Bot " + accessInfo.getBotAppId() + "." + accessInfo.getBotToken();
     }
 
+    public void overrideHeartbeatInterval(int interval) {
+        overrideHeartbeatInterval = interval;
+    }
+
     private String getApiBase() {
         String apiBase = "https://api.sgroup.qq.com";
         if (accessInfo.getUseSandBoxMode()) {
@@ -115,25 +123,28 @@ public class BotCore {
      * @param totalShard 总分片数
      */
     public void start(Integer shard, Integer totalShard) {
-        Gateway gateway = getGateway();
-        if (gateway.getCode() == null) {
-            String url = gateway.getUrl();
-            log.info("网关地址: {}, 建议分片数: {}", url, gateway.getShards());
-            try {
-                Client client = new Client(new URI(url));
-                client.setToken(getToken());
-                client.setIntents(intents);
-                client.setEventHandler(eventHandler);
-                client.setShard(shard, totalShard);
-                client.setConnectionLostTimeout(0);
-                client.connect();
-            } catch (URISyntaxException e) {
-                log.error("WebSocket 连接地址错误!");
-                System.exit(1);
+        if (webSocketEnabled) {
+            Gateway gateway = getGateway();
+            if (gateway.getCode() == null) {
+                String url = gateway.getUrl();
+                log.info("网关地址: {}, 建议分片数: {}", url, gateway.getShards());
+                try {
+                    Client client = new Client(new URI(url));
+                    client.setToken(getToken());
+                    client.setIntents(intents);
+                    client.setEventHandler(eventHandler);
+                    client.setShard(shard, totalShard);
+                    client.setConnectionLostTimeout(0);
+                    if (overrideHeartbeatInterval != -1) client.setOverrideHeartbeatInterval(overrideHeartbeatInterval);
+                    client.connect();
+                } catch (URISyntaxException e) {
+                    log.error("WebSocket 连接地址错误!");
+                    System.exit(1);
+                }
+            } else {
+                log.error("获取 Gateway 失败! {} {}", gateway.getCode(), gateway.getMessage());
+                System.exit(gateway.getCode());
             }
-        } else {
-            log.error("获取 Gateway 失败! {} {}", gateway.getCode(), gateway.getMessage());
-            System.exit(gateway.getCode());
         }
     }
 

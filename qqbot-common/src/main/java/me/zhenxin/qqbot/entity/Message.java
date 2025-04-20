@@ -107,4 +107,10 @@ public class Message {
      * </p>
      */
     private String srcGuildId;
+
+    public MessageReference reference() {
+        MessageReference reference = new MessageReference();
+        reference.setMessageId(getId());
+        return reference;
+    }
 }

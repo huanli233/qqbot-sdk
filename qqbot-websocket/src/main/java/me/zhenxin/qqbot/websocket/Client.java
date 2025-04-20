@@ -55,6 +55,8 @@ public class Client extends WebSocketClient {
     private Integer shard;
     @Getter
     private Integer totalShard;
+    @Getter @Setter
+    private int overrideHeartbeatInterval;
 
     public Client(URI uri) {
         super(uri);
@@ -75,7 +77,7 @@ public class Client extends WebSocketClient {
 
     @Override
     public void onMessage(String message) {
-        log.debug("收到消息: " + message);
+        log.debug("收到消息: {}", message);
         Payload payload = JSON.parseObject(message, Payload.class);
         if (payload.getS() != null) {
             seq = payload.getS();
@@ -97,7 +99,7 @@ public class Client extends WebSocketClient {
                 event.onHeartbeat();
                 break;
             default:
-                log.warn("未知消息类型: OpCode " + payload.getOp());
+                log.warn("未知消息类型: OpCode {}", payload.getOp());
         }
     }
 
@@ -108,7 +110,7 @@ public class Client extends WebSocketClient {
 
     @Override
     public void onError(Exception ex) {
-        log.info("发生错误: " + ex.getMessage());
+        log.info("发生错误: {}", ex.getMessage());
         ex.printStackTrace();
         eventHandler.onError(ex);
     }
@@ -118,4 +120,5 @@ public class Client extends WebSocketClient {
         super.send(text);
         log.debug("发送消息: " + text);
     }
+
 }

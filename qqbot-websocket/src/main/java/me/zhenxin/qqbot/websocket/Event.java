@@ -244,6 +244,13 @@ class Event {
     // OP 10
     public void onHello(Payload payload) {
         Hello hello = JSON.toJavaObject((JSONObject) payload.getD(), Hello.class);
+        int heartbeatInterval;
+        if (client.getOverrideHeartbeatInterval() > 0) {
+            heartbeatInterval = client.getOverrideHeartbeatInterval();
+        } else {
+            heartbeatInterval = hello.getHeartbeatInterval();
+        }
+        log.info("心跳间隔：{}", heartbeatInterval);
         if (sessionId == null || sessionId.isEmpty()) {
             log.info("正在发送鉴权...");
             sendIdentify();
@@ -254,7 +261,7 @@ class Event {
         if (timer != null) {
             timer.cancel();
         }
-        startHeartbeatTimer(hello.getHeartbeatInterval());
+        startHeartbeatTimer(heartbeatInterval);
     }
 
     // OP 11
