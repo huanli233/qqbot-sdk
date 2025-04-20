@@ -118,7 +118,7 @@ public class Client extends WebSocketClient {
     @Override
     public void send(String text) {
         super.send(text);
-        log.debug("发送消息: " + text);
+        log.debug("发送消息: {}", text);
     }
 
 }

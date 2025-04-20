@@ -227,7 +227,7 @@ class Event {
                 log.info("恢复连接成功, 离线消息已处理!");
                 break;
             default:
-                log.warn("未知事件: " + e);
+                log.warn("未知事件: {}", e);
         }
     }
 
