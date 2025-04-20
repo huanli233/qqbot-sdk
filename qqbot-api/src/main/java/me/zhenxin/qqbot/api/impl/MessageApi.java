@@ -54,6 +54,9 @@ public class MessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("content", content);
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         return sendMessage(channelId, data);
     }
     
@@ -70,6 +73,9 @@ public class MessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("content", content);
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         data.put("message_reference", messageReference);
         return sendMessage(channelId, data);
     }
@@ -103,6 +109,9 @@ public class MessageApi extends BaseApi {
         data.put("content", content);
         data.put("image", image.toString());
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         return sendMessage(channelId, data);
     }
 
@@ -118,6 +127,9 @@ public class MessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("ark", ark);
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         return sendMessage(channelId, data);
     }
 
@@ -133,6 +145,9 @@ public class MessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("embed", embed);
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         return sendMessage(channelId, data);
     }
 
@@ -146,6 +161,9 @@ public class MessageApi extends BaseApi {
     public Message sendMessage(String channelId, MessageMarkdown markdown) throws ApiException {
         Map<String, Object> data = new HashMap<>();
         data.put("markdown", markdown);
+        int plus = seqMap.getOrDefault("", 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put("", plus);
         return sendMessage(channelId, data);
     }
 
@@ -161,6 +179,9 @@ public class MessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("markdown", markdown);
         data.put("keyboard", keyboard);
+        int plus = seqMap.getOrDefault("", 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put("", plus);
         return sendMessage(channelId, data);
     }
 

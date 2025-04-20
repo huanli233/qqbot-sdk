@@ -8,7 +8,9 @@ import me.zhenxin.qqbot.entity.MessageMarkdown;
 import me.zhenxin.qqbot.entity.ark.MessageArk;
 
 import java.net.URL;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 public class C2CMessageApi extends BaseApi {
@@ -16,6 +18,8 @@ public class C2CMessageApi extends BaseApi {
     public C2CMessageApi(AccessInfo accessInfo) {
         super(accessInfo);
     }
+
+    private static final Map<String, Integer> seqMap = Collections.synchronizedMap(new LinkedHashMap<>());
 
     /**
      * 发送私聊文字消息
@@ -25,6 +29,9 @@ public class C2CMessageApi extends BaseApi {
         data.put("content", content);
         data.put("msg_type", 0);
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         return sendMessage(openId, data);
     }
 
@@ -36,6 +43,9 @@ public class C2CMessageApi extends BaseApi {
         data.put("ark", ark);
         data.put("msg_type", 3);
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         return sendMessage(groupOpenId, data);
     }
 
@@ -47,6 +57,9 @@ public class C2CMessageApi extends BaseApi {
         data.put("embed", embed);
         data.put("msg_type", 4);
         data.put("msg_id", messageId);
+        int plus = seqMap.getOrDefault(messageId, 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put(messageId, plus);
         return sendMessage(openId, data);
     }
 
@@ -57,6 +70,9 @@ public class C2CMessageApi extends BaseApi {
         Map<String, Object> data = new HashMap<>();
         data.put("msg_type", 2);
         data.put("markdown", markdown);
+        int plus = seqMap.getOrDefault("", 1) + 1;
+        data.put("msg_seq", plus);
+        seqMap.put("", plus);
         return sendMessage(openId, data);
     }
 
